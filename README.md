@@ -1,4 +1,4 @@
-# gosh
+# gsh
 
 ## Basically a Go shell script to learn the language.
 
