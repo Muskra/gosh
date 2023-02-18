@@ -1,17 +1,6 @@
-         _              _            _       _   ##
-        /\ \           / /\         / /\    / /\ ##
-       /  \ \         / /  \       / / /   / / / ##
-      / /\ \_\       / / /\ \__   / /_/   / / /  ##
-     / / /\/_/      / / /\ \___\ / /\ \__/ / /   ##
-    / / / ______    \ \ \ \/___// /\ \___\/ /    ##
-   / / / /\_____\    \ \ \     / / /\/___/ /     ##
-  / / /  \/____ /_    \ \ \   / / /   / / /      ##
- / / /_____/ / //_/\__/ / /  / / /   / / /_      ##
-/ / /______\/ / \ \/___/ /  / / /   / / //\_\    ##
-\/___________/   \_____\/   \/_/    \/_/ \/_/    ##
-                                                 ##
-                    Go Shell (that is) Hackable. ##
-###################################################
+##################################
+## Go Shell (that is) Hackable. ##
+##################################
 
 ## I wanted to do a shell in go. Simple and made to be hacked by design.
 ## This project is a way of learning computers, programming and so on, you can help me but don't give away the answers, i want to learn as much as i can.
