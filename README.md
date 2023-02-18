@@ -34,7 +34,7 @@ Thank you.
         ``  same as quotes but multilines
         #   comment/ignore the line after the # character
 
-##### Commands to use that are not usable at the moment since we don't have any shell to work with:
+##### Commands to use that are not usable at the moment since we don't have any shell to work with this sentence is also too long to be read:
 implemented:
         exit
         clear
