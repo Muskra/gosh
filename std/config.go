@@ -30,7 +30,7 @@ func init() {
 	*/
 
 	}
-
+  // this map is actually not working since i didn't implemented the associated functions for each special chars
 	specialArgMap = map[string] int {//fnCmd {
 		/*
 		special characters:
@@ -52,16 +52,13 @@ func init() {
 		  - launching the second command and pass it the result of the previous one
 		in the program we will prevent the result to be parsed if it's an error.
 		*/
+    // WIP state
     "|": 1,
+    // TODO state
+    // i only added the basics here
     "||": 2,
     "&": 3,
     "&&": 4,
     ";": 4,
-		//"|":  pipe,
-    //to implement next:
-    //  "||": logicOr,
-    //  "&":  background,
-    //  "&&": logicAnd
-		//  ";":  sequence,
 	}
 }
