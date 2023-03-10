@@ -39,4 +39,5 @@ implemented:
         exit
         clear
         help
+work in progress:
         pipe
