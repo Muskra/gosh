@@ -3,7 +3,7 @@ package std
 // map functions to strings
 type fnCmd func([]string) Descriptor;
 var cmdMap map[string] fnCmd;
-var argMap map[string] fnCmd;
+var specialArgMap map[string] int;//fnCmd;
 
 // init
 func init() {
@@ -16,9 +16,9 @@ func init() {
 
 	// standard library
 	"clear":  clear,
-    "exit":   exit,
-    "help":   help,
-    //"ps":     ps,
+  "exit":   exit,
+  "help":   help,
+  //"ps":     ps,
 	// put custom commands below
 	// if you print something, add \n to the end of your string to make it prettier
 	// and don't forget the last ","
@@ -31,7 +31,7 @@ func init() {
 
 	}
 
-	specialArgMap = map[string] fnCmd {
+	specialArgMap = map[string] int {//fnCmd {
 		/*
 		special characters:
 		        |   the output of the first command is sent to the second one
@@ -52,7 +52,12 @@ func init() {
 		  - launching the second command and pass it the result of the previous one
 		in the program we will prevent the result to be parsed if it's an error.
 		*/
-		"|":  pipe,
+    "|": 1,
+    "||": 2,
+    "&": 3,
+    "&&": 4,
+    ";": 4,
+		//"|":  pipe,
     //to implement next:
     //  "||": logicOr,
     //  "&":  background,

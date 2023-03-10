@@ -88,7 +88,7 @@ func commandChopper(parameters []string) map[int][]string {
 	}
 	return listMap
 }
-
+/*
 func pipe(parameters []string) Descriptor {
 	var helpMessage string = "\nUsage:\t[command1] | [command2]\n";
 	if len(parameters) >= 3 {
@@ -120,4 +120,4 @@ func pipe(parameters []string) Descriptor {
 		}
 	}
 	return ret
-}
+}*/
