@@ -56,17 +56,17 @@ func TestLoop(characterset string, lenght int) {
         break;
       }
     }
-    fmt.Printf("sentence: \n{%s}", prompt)
+    fmt.Printf("\nsentence: \n{%s}", prompt)
     // this is where we call our next function
-    commandList = SentenceSplitter(prompt)
+    commandList = SentenceSplitter(strings.TrimSuffix(prompt, "\n"))
     // printout result
-    fmt.Println("\nfinal_command: ")
-    if len(commandList) > 0 {
+    if len(commandList) > 0 && commandList != nil {
+      fmt.Println("\nfinal_command: ")
       for _, cmd := range commandList {
-        fmt.Printf("{%s}{%#v}", cmd, commandList)
+        fmt.Printf("{%s}", cmd)
       }
     }
-    //fmt.Println("")
+    fmt.Println("")
   }
 }
 // Entrypoint of the program, will be launch as normal behavior
