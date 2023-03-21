@@ -63,10 +63,10 @@ func TestLoop(characterset string, lenght int) {
     fmt.Println("\nfinal_command: ")
     if len(commandList) > 0 {
       for _, cmd := range commandList {
-        fmt.Printf("{%s}", cmd)
+        fmt.Printf("{%s}{%#v}", cmd, commandList)
       }
     }
-    fmt.Println("")
+    //fmt.Println("")
   }
 }
 // Entrypoint of the program, will be launch as normal behavior
@@ -97,7 +97,7 @@ func NormalLoop() {
         }
       }
       // this is where we call our next function
-      commandList = SentenceSplitter(prompt)
+      commandList = SentenceSplitter(strings.TrimSuffix(prompt, "\n"))
       if len(commandList) > 0 {
         for _, cmd := range commandList {
           fmt.Printf("{%s}", cmd)
@@ -123,13 +123,15 @@ func SentenceSplitter(sentence string) []string {
   // defines the ret variable
   var ret []string;
   var xRet []string;
+  var zRet []string;
   // used for temporary or buffering
   var temp string;
   // bool variable, used as a check for the presence of "quotes"
   var bl bool;
   // iterate throught the whole sentence and isolate each strings from other words within a slice
   for index, ch := range sentence {
-    if string(ch) == "\"" && bl == false {
+    // character is a quote
+    if string(ch) == "\"" && bl == false && index < len(sentence)-1 {
       ret = append(ret, temp)
       bl = true
       temp = string(ch)
@@ -142,20 +144,30 @@ func SentenceSplitter(sentence string) []string {
       temp = ""
       continue;
     }
+    // character is not a quote
     if string(ch) != "\"" && bl == false {
       temp = temp+string(ch)
     }
     if string(ch) != "\"" && bl == true {
       temp = temp+string(ch)
     }
-    if index == len(sentence)-1 {
+    // we are at the end of the sentence
+    if index == len(sentence)-1 && bl == false && string(ch) != "\"" {
       ret = append(ret, temp)
+    }
+    // we are at the end of the sentence but we have seen a quote before, the program raise an error because we can't parse the string. this is a syntax error from the user
+    // break is not required but for "safety reasons" i prefer to add it explicitely
+    if index == len(sentence)-1 && (bl == true || string(ch) == "\"") {
+      ret = nil
+      fmt.Println("syntax error!")
+      break;
     }
   }
   // here we are iterating again, but this time throught the slice, and we are isolating special characters, say punctuation from the other words
   // we also won't check strings here since they already are checked beforehand
   for index, word := range ret {
     if len(word) > 1 {
+      // before calling the function respoinsible to lookup the special characters, we verify if the word don't have any quote in it
       if strings.Contains(string(word), "\"") == false {
         for _, wrd := range strings.Fields(word) {
           wrd = strings.TrimSpace(wrd)
@@ -164,19 +176,36 @@ func SentenceSplitter(sentence string) []string {
             xRet = append(xRet, xWrd)
           }
         }
+        // in case we have some quotes we append it without trying to lookup for special characters
       } else if strings.Contains(string(word), "\"") == true {
         xRet = append(xRet, string(word))
+        // incase there is something unexpected
       } else {
+        xRet = nil
         fmt.Println("syntax error!")
+        break;
       }
-    } else if len(word) == 1 || index == len(ret)-1 {
+      // if word isn't an ampty string AND ( word is just one char OR index is equal to word lenght )
+    } else if len(word) != 0 && (len(word) == 1 || index == len(ret)-1) {
       xRet = append(xRet, word)
+      // word is an empty string, we don't care about it
+    } else if len(word) == 0 && word != "\"" {
+      continue;
     } else {
-      fmt.Print("\nparse error!\n")
+      xRet = nil
+      fmt.Println("parse error!")
       break;
     }
   }
-  return xRet
+  // here we just reloop and remove all empty quote, not ideal but it's working and prevent future actions to be flooded by empty useless words
+  for _, word := range xRet {
+    if len(word) == 0 {
+      continue;
+    } else {
+      zRet = append(zRet, word)
+    }
+  }
+  return zRet
 }
 
 // checks wether we have special characters or not
@@ -185,7 +214,7 @@ func SpecialCharLookup(word string) []string {
   // buffer
   var buff string;
   // return variable
-  var ret []string;
+  var yRet []string;
   // boolean checks, used as true to declare if the previous char was special or not
   var bl bool;
   // if there is at least 2 chars
@@ -196,10 +225,10 @@ func SpecialCharLookup(word string) []string {
       if std.Census(2, string(char)) == true && bl == false {
         // here, we also checks if the special char combined with the next one is a special char too
         if index < len(word)-1 && std.Census(2, string(char)+string(word[index+1])) == true {
-          ret = append(ret, buff, string(char)+string(word[index+1]))
+          yRet = append(yRet, buff, string(char)+string(word[index+1]))
           bl = true
         } else {
-          ret = append(ret, buff, string(char))
+          yRet = append(yRet, buff, string(char))
         }
         buff = ""
         // in case we have a special char, but the bool was set, we just reset the buffer
@@ -208,19 +237,16 @@ func SpecialCharLookup(word string) []string {
         bl = false
         // when we are at the last char of the string
       } else if index == len(word)-1 && bl == false {
-        ret = append(ret, buff+string(char))
+        yRet = append(yRet, buff+string(char))
         // if nothing was triggered, just append buffer
       } else {
         buff = buff+string(char)
       }
     }
-    // we have only one char in the string
+    // we have only one char in the string and is not of len(0)
   } 
-  if len(word) == 1 {
-    ret = append(ret, word)
-    // error trigger
-  } /*else {
-    fmt.Print("\nparse error!\n")
-  }*/
-  return ret
+  if len(word) == 1 && len(word) != 0 {
+    yRet = append(yRet, word)
+  }
+  return yRet
 }
